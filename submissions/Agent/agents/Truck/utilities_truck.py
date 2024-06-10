@@ -123,9 +123,16 @@ def truck_locs(obs, team):
 
 def nearest_enemy(allied_unit_loc, enemy_locs):
     distances = []
+
+
     for enemy in enemy_locs:
         distances.append(getDistance(allied_unit_loc, enemy))
+
+    if len(distances) == 0:
+        return None
+    
     nearest_enemy_loc = np.argmin(distances)
+
 
     return enemy_locs[nearest_enemy_loc]
 
@@ -272,9 +279,6 @@ def multi_forced_anchor(movement, obs, team, map_grid = None):
                     # If the distance is more than 2, move towards the resource
                     if closest_distance > 2:
                         movement[i] = probabilistic_move2enemy_with_astar(ally, nearest_enemy=nearest_enemy(list(ally), resource_locs(obs)), map_grid=map_grid, movement=movement[i], probability=0.7)    
-
-                    
-
 
 
     return movement     
@@ -497,6 +501,8 @@ def move_towards_enemy_with_astar(tank_position, nearest_enemy, map_grid):
     return best_movement
 
 def probabilistic_move2enemy_with_astar(tank_position, nearest_enemy, map_grid, movement, probability = 0.8):
+    if nearest_enemy is None:
+        return movement
     if np.random.rand() < probability:
         return move_towards_enemy_with_astar(tank_position, nearest_enemy, map_grid)
     else:
