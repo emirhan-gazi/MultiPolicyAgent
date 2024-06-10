@@ -1,0 +1,37 @@
+HeavyTank:
+  cost: 2
+  attack: 2
+  max_hp: 4
+  heavy: True
+  fly: False
+  anti_air: False
+LightTank:
+  cost: 1
+  attack: 2
+  max_hp: 2
+  heavy: False
+  fly: False
+  anti_air: True
+Drone:
+  cost: 1
+  attack: 1
+  max_hp: 1
+  heavy: False
+  fly: True
+  anti_air: True
+Truck:
+  cost: 1
+  max_hp: 1
+  max_load: 3
+  heavy: False
+  fly: False
+  anti_air: False
+Base:
+  starting_resource: 5
+  recruit: True
+Terrain:
+  mountain_risk: 0.25
+  wreckage_time: 5 
+Animation:
+  enabled: True 
+  speed: 1

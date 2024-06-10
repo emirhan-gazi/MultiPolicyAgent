@@ -1,0 +1,52 @@
+max_turn: 60
+turn_timer: 10
+map:
+  x: 12
+  y: 8
+red:
+  base:
+    x: 11
+    y: 7
+  units:
+    - type: LightTank
+      x: 10
+      y: 7
+    - type: LightTank
+      x: 8
+      y: 7
+blue:
+  base:
+    x: 0
+    y: 0
+  units:
+    - type: LightTank
+      x: 1
+      y: 0
+    - type: LightTank
+      x: 3
+      y: 0
+resources:
+  - x: 0
+    y: 7
+  - x: 0
+    y: 6
+  - x: 1
+    y: 7
+  - x: 1
+    y: 6
+  - x: 5
+    y: 3
+  - x: 5
+    y: 4
+  - x: 6
+    y: 3
+  - x: 6
+    y: 4
+  - x: 11
+    y: 0
+  - x: 11
+    y: 1
+  - x: 10
+    y: 0
+  - x: 10
+    y: 1

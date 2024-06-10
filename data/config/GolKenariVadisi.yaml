@@ -1,0 +1,106 @@
+max_turn: 300
+turn_timer: 10
+map:
+  x: 7
+  y: 15
+  terrain:
+
+    - ['g', 'g', 'w', 'w', 'w', 'g', 'g']
+    - ['g', 'g', 'w', 'w', 'w', 'g', 'g']
+    - ['g', 'g', 'w', 'w', 'w', 'g', 'g']
+    - ['g', 'g', 'm', 'm', 'm', 'g', 'g']
+    - ['g', 'g', 'g', 'm', 'm', 'g', 'g']
+    - ['g', 'g', 'g', 'm', 'g', 'g', 'g']
+    - ['g', 'g', 'g', 'g', 'g', 'g', 'g']
+    - ['g', 'g', 'g', 'g', 'g', 'g', 'g']
+    - ['g', 'g', 'g', 'g', 'g', 'g', 'g']
+    - ['g', 'g', 'g', 'g', 'g', 'g', 'g']
+    - ['g', 'g', 'm', 'm', 'g', 'g', 'g']
+    - ['g', 'g', 'm', 'm', 'm', 'g', 'g']
+    - ['g', 'g', 'w', 'w', 'w', 'g', 'g']
+    - ['g', 'g', 'w', 'w', 'w', 'g', 'g']
+    - ['g', 'g', 'w', 'w', 'w', 'g', 'g']
+    -
+red:
+  base:
+    x: 6
+    y: 0
+  units:
+    - type: Truck
+      x: 6
+      y: 1
+    - type: Truck
+      x: 6
+      y: 2
+    - type: LightTank
+      x: 6
+      y: 3
+    - type: HeavyTank
+      x: 5
+      y: 1
+    - type: Drone
+      x: 5
+      y: 0
+blue:
+  base:
+    x: 0
+    y: 14
+  units:
+    - type: Truck
+      x: 0
+      y: 13
+    - type: Truck
+      x: 0
+      y: 12
+    - type: LightTank
+      x: 0
+      y: 11
+    - type: HeavyTank
+      x: 1
+      y: 13
+    - type: Drone
+      x: 1
+      y: 14
+resources:
+  - x: 0
+    y: 0
+  - x: 0
+    y: 1
+  - x: 0
+    y: 2
+  - x: 1
+    y: 0
+  - x: 1
+    y: 1
+  - x: 1
+    y: 2
+  - x: 0
+    y: 3
+  - x: 1
+    y: 3
+  - x: 6
+    y: 14
+  - x: 6
+    y: 13
+  - x: 6
+    y: 12
+  - x: 6
+    y: 11
+  - x: 5
+    y: 14
+  - x: 5
+    y: 13
+  - x: 5
+    y: 12
+  - x: 5
+    y: 11
+  - x: 3
+    y: 9
+  - x: 3
+    y: 6
+  - x: 2
+    y: 9
+  - x: 4
+    y: 5
+
+
