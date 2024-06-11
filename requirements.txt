@@ -6,3 +6,5 @@ ray[rllib]==1.10.0
 gym==0.21.0
 jupyter==1.0.0
 jupyterlab==4.2.1
+protobuf==3.20.0
+numpy==1.23
