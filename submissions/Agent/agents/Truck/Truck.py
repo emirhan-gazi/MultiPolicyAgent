@@ -5,11 +5,11 @@ from gym import spaces
 import numpy as np
 import yaml
 from game import Game
-from utilities import multi_forced_anchor, necessary_obs, decode_location, multi_reward_shape, enemy_locs, ally_locs, getDistance
+from utilities_truck import multi_forced_anchor, necessary_obs, decode_location, multi_reward_shape, enemy_locs, ally_locs, getDistance
 
 
 
-class Collect(BaseLearningAgentGym):
+class Truck(BaseLearningAgentGym):
     """Simple agent works for every environment"""
     
     tagToString = {
@@ -86,7 +86,7 @@ class Collect(BaseLearningAgentGym):
                     my_units.append(
                     {   
                         'unit': units[team][i][j],
-                        'tag': Collect.tagToString[units[team][i][j]],
+                        'tag': Truck.tagToString[units[team][i][j]],
                         'hp': hps[team][i][j],
                         'location': (i,j),
                         'load': load[team][i][j]
@@ -96,7 +96,7 @@ class Collect(BaseLearningAgentGym):
                     enemy_units.append(
                     {   
                         'unit': units[enemy_team][i][j],
-                        'tag': Collect.tagToString[units[enemy_team][i][j]],
+                        'tag': Truck.tagToString[units[enemy_team][i][j]],
                         'hp': hps[enemy_team][i][j],
                         'location': (i,j),
                         'load': load[enemy_team][i][j]
@@ -124,7 +124,7 @@ class Collect(BaseLearningAgentGym):
 
     @staticmethod
     def just_decode_state(obs, team, enemy_team):
-        state, _ = Collect._decode_state(obs, team, enemy_team)
+        state, _ = Truck._decode_state(obs, team, enemy_team)
         return state
 
     def decode_state(self, obs):

@@ -10,3 +10,4 @@ protobuf==3.20.0
 numpy==1.23
 torch==1.10.0
 pickle
+scikit-learn==1.5.0

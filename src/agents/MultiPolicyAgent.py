@@ -2,15 +2,15 @@ from agents.RiskyValley import RiskyValley
 from game import Game
 import yaml
 import numpy as np
-import gym
 from gym import spaces
 from utilities import  ally_locs,truck_locs,drones_locs, light_tanks_locs, heavy_tanks_locs
 import ray
 from ray.rllib.agents.ppo import PPOTrainer
 from ray.tune import run_experiments, register_env
 from argparse import Namespace
-from agents.Attack import Attack
-from agents.Collect import Collect
+from agents.LightTank import LightTank
+from agents.HeavyTank import HeavyTank
+from agents.Truck import Truck
 from agents.Drone import Drone
 import pickle
 
@@ -55,11 +55,11 @@ class MultiPolicyAgent:
         self.enemy_team = (team+1)%2
         self.temp_agents  = [None,"RandomAgent"]
        
-        truck_model_path = "/submissions/Agent/models/Truck/checkpoint_000440/checkpoint-440"
-        light_tank_model_path = "/submissions/Agent/models/LightTank/checkpoint_000070/checkpoint-70"
-        heavy_tank_model_path = "/submissions/Agent/models/HeavyTank/checkpoint_000070/checkpoint-70"
-        drone_model_path = "/submissions/Agent/models/Drone/checkpoint_000070/checkpoint-70"
-        manager_model_path = "/submissions/Agent/models/Manager/model2.pkl"
+        truck_model_path = "src/models/Truck/checkpoint_000760/checkpoint-760"
+        light_tank_model_path = "src/models/LightTank/checkpoint_000400/checkpoint-400"
+        heavy_tank_model_path = "src/models/LightTank/checkpoint_000400/checkpoint-400"
+        drone_model_path = "src/models/Drone/checkpoint_000120/checkpoint-120"
+        manager_model_path = "src/models/Manager/model2.pkl"
 
         args_for_models = Namespace(map="RiskyValley", render=False, gif=False, img=False)
         self.config = self.read_hypers("RiskyValley")
@@ -73,19 +73,19 @@ class MultiPolicyAgent:
         self.initiate_manager(manager_model_path)
     
 
-    def initiate_truck(self, model_path, args):
+    def initiate_truck(self, model_path):
         self.ppo_agent.restore(checkpoint_path=model_path)
         self.truck_policy = self.ppo_agent.get_policy()
 
-    def initiate_light_tank(self, model_path, args):
+    def initiate_light_tank(self, model_path):
         self.ppo_agent.restore(checkpoint_path=model_path)
         self.light_tank_policy = self.ppo_agent.get_policy()
     
-    def initiate_heavy_tank(self, model_path, args):
+    def initiate_heavy_tank(self, model_path):
         self.ppo_agent.restore(checkpoint_path=model_path)
         self.heavy_tank_policy = self.ppo_agent.get_policy()
     
-    def initiate_drone(self, model_path, args):
+    def initiate_drone(self, model_path):
         self.ppo_agent.restore(checkpoint_path=model_path)
         self.drone_policy = self.ppo_agent.get_policy()
     def initiate_manager(self, model_path):
@@ -163,16 +163,16 @@ class MultiPolicyAgent:
     def compute_single_action(self,state,raw_state,unit): 
         if unit == 1:
             actions, _, _ = self.truck_policy.compute_single_action(state.astype(np.float32))
-            location, movement, target, train = Collect.just_take_action(actions,raw_state , self.team)
+            location, movement, target, train = Truck.just_take_action(actions,raw_state , self.team, self.map_grid)
             return location, movement, target, train
         elif unit == 2:
             actions, _, _ = self.light_tank_policy.compute_single_action(state.astype(np.float32))
-            location, movement, target, train = Attack.just_take_action(actions,raw_state , self.team, self.map_grid)
+            location, movement, target, train = LightTank.just_take_action(actions,raw_state , self.team, self.map_grid)
             return location, movement, target, train
 
         elif unit == 3:
             actions, _, _ = self.heavy_tank_policy.compute_single_action(state.astype(np.float32))
-            location, movement, target, train = Attack.just_take_action(actions,raw_state , self.team, self.map_grid)
+            location, movement, target, train = HeavyTank.just_take_action(actions,raw_state , self.team, self.map_grid)
             return location, movement, target, train
         
         elif unit == 4:
@@ -226,10 +226,14 @@ class MultiPolicyAgent:
                 movement.append(drone_movement[i])
                 enemy_order.append(drone_target[i])
 
-        resource = raw_state['score'] 
-        manager_input  = [[resource, len(trucks), len(light_tanks), len(heavy_tanks), len(drones), len(enemy_trucks), len(enemy_light_tanks), len(enemy_heavy_tanks), len(enemy_drones)]]
-        output = self.model.predict(manager_input)
-        train = int(output[0])
+        resource = raw_state['score'][self.team]
+        total_units = len(trucks) + len(light_tanks) + len(heavy_tanks) + len(drones)
+        if total_units >= 7:
+            train = 0
+        else:
+            manager_input  = [[resource, len(trucks), len(light_tanks), len(heavy_tanks), len(drones), len(enemy_trucks), len(enemy_light_tanks), len(enemy_heavy_tanks), len(enemy_drones)]]
+            output = self.model.predict(manager_input)
+            train = int(output[0])
                 
         return [locations, movement, enemy_order, train]
     
