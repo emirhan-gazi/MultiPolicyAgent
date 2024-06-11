@@ -22,7 +22,9 @@
 
 - `models` : This directory contains the trained models of the Truck, LightTank, HeavyTank and Drone classes. You can find this directory in the `submissions/Agent/models` directory. In order to show appropriate modular design of this file we put this directory in `src/agents/models` directory also.
 
-- `train_scripts` : This directory contains the training scripts which is `traincadet.py` of the Truck, LightTank, HeavyTank and Drone classes. You can find this directory in the `submissions/Agent/train_scripts` directory. In order to show appropriate modular design of this file we put this directory in `src/agents/train_scripts` directory also.
+- `train_scripts` : This directory contains the training scripts which is `traincadet.py` of the Truck, LightTank, HeavyTank and Drone classes. You can find this directory in the `submissions/Agent/train_scripts` directory.
+
+- `maps` : About the maps you can find every yaml which used for specific agent in the `submissions/Agent/train_scripts/<agent_name>` directory. 
 
 Here is the structure of the `src/agents` directory of our submission:
 ```
@@ -84,10 +86,19 @@ Here is the structure of the `submissions/Agent` directory of our submission:
 |         |--- Drone
 |              |--- Drone.pth
 |    |--- train_scripts
-|         |--- traincadet_truck.py
-|         |--- traincadet_light_tank.py
-|         |--- traincadet_heavy_tank.py
-|         |--- traincadet_drone.py
+|         |--- Truck
+|               |--- traincadet_truck.py
+|               |--- <map_name>.yaml
+|         |--- LightTank
+|               |--- traincadet_light_tank.py
+|               |--- <map_name>.yaml
+|         |--- HeavyTank
+|               |--- traincadet_heavy_tank.py
+|               |--- <map_name>.yaml
+|         |--- Drone
+|               |--- traincadet_drone.py
+|               |--- <map_name>.yaml
+|
 ```
 
 
