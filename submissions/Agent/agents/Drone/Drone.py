@@ -213,28 +213,28 @@ class Drone(BaseLearningAgentGym):
         locations = list(map(tuple, locations))
         return [locations, movement, enemy_order, train]
 
-
     def step(self, action):
         harvest_reward = 0
         kill_reward = 0
         martyr_reward = 0
-        mountain_penalty = -10
+        mountain_penalty = -20
         drone_reward = 0
 
         action = self.take_action(action)
         next_state, _, done =  self.game.step(action)
         harvest_reward, enemy_count, ally_count = multi_reward_shape(self.nec_obs, self.team)
         if enemy_count < self.previous_enemy_count:
-            kill_reward = (self.previous_enemy_count - enemy_count) * 5
+            kill_reward = (self.previous_enemy_count - enemy_count) * 8
 
         if ally_count < self.previous_ally_count:
-            martyr_reward = (self.previous_ally_count - ally_count) * 5
+            martyr_reward = (self.previous_ally_count - ally_count) * 4
         
         for loc in action[0]:
-            if self.nec_obs['terrain'][loc[0]][loc[1]] == 'mountain':
+            if self.nec_obs['terrain'][loc[0]][loc[1]] == 'mountain' or self.nec_obs['terrain'][loc[0]][loc[1]] == 'm':
+                # print("Mountain")
                 drone_reward += mountain_penalty
 
-        reward = harvest_reward + kill_reward - martyr_reward + drone_reward
+        reward = kill_reward - martyr_reward + drone_reward
 
 
         self.previous_enemy_count = enemy_count

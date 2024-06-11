@@ -140,6 +140,9 @@ def nearest_enemy(allied_unit_loc, enemy_locs):
     distances = []
     for enemy in enemy_locs:
         distances.append(getDistance(allied_unit_loc, enemy))
+    if len(distances) == 0:
+        return None
+
     nearest_enemy_loc = np.argmin(distances)
 
     return enemy_locs[nearest_enemy_loc]
@@ -267,9 +270,12 @@ def astar_path_finding(map_grid, start, end):
     return None
 
 def change_path(map_grid, path):
-    for i in range(len(path)):
-        if map_grid[path[i][0]][path[i][1]] == "m":
-            return path[:i]
+    try:
+        for i in range(len(path)):
+            if map_grid[path[i][0]][path[i][1]] == "m":
+                return path[:i]
+    except IndexError:
+        return path
     return path
 
 def move_towards_enemy_with_astar(drone, nearest_enemy, map_grid):
@@ -290,7 +296,9 @@ def move_towards_enemy_with_astar(drone, nearest_enemy, map_grid):
     return best_movement
 
 def probabilistic_move2enemy_with_astar(drone, nearest_enemy, map_grid, movement):
-    if np.random.rand() < 0.98:
+    if nearest_enemy is None:
+        return movement
+    if np.random.rand() < 0.9:
         return move_towards_enemy_with_astar(drone, nearest_enemy, map_grid)
     else:
         return movement
@@ -370,6 +378,7 @@ def point_blank_shoot(allied_unit_loc, enemy_locs, action):
     distances = []
     for enemy in enemy_locs:
         distances.append(getDistance(allied_unit_loc, enemy))
+    
     if min(distances) <= 2:
         nearest_enemy_loc = np.argmin(distances)
         return enemy_locs[nearest_enemy_loc]
@@ -444,21 +453,6 @@ def multi_reward_shape(obs, team): # Birden fazla truck için
     ally = ally_locs(obs, team)
     trucks = truck_locs(obs, team)
 
-    for truck in trucks:
-        for reso in resource_loc:
-            print(reso,"RESOURCE")
-            if not isinstance(truck, np.int64):
-                print(loads.shape, "load shape")
-                print(loads[truck[0], truck[1]].shape, "load at truck")
-                print(truck.shape, "Last Truck")
-                if (reso == truck).all():
-                    if loads[truck[0], truck[1]].max() != 3: 
-                        load_reward += 10
-            else:
-                pass
-            if not isinstance(truck, np.int64):
-                if loads[truck[0], truck[1]].max() != 0 and (truck == base_loc).all():
-                    unload_reward += 20
 
     harvest_reward = load_reward + unload_reward + enemy_load_reward + enemy_unload_reward
     return harvest_reward, len(enemy), len(ally)
