@@ -71,19 +71,19 @@ class MultiPolicyAgent:
         self.initiate_drone(drone_model_path)
     
 
-    def initiate_truck(self, model_path, args):
+    def initiate_truck(self, model_path):
         self.ppo_agent.restore(checkpoint_path=model_path)
         self.truck_policy = self.ppo_agent.get_policy()
 
-    def initiate_light_tank(self, model_path, args):
+    def initiate_light_tank(self, model_path):
         self.ppo_agent.restore(checkpoint_path=model_path)
         self.light_tank_policy = self.ppo_agent.get_policy()
     
-    def initiate_heavy_tank(self, model_path, args):
+    def initiate_heavy_tank(self, model_path):
         self.ppo_agent.restore(checkpoint_path=model_path)
         self.heavy_tank_policy = self.ppo_agent.get_policy()
     
-    def initiate_drone(self, model_path, args):
+    def initiate_drone(self, model_path):
         self.ppo_agent.restore(checkpoint_path=model_path)
         self.drone_policy = self.ppo_agent.get_policy()
 
