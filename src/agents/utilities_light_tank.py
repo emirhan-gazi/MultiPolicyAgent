@@ -497,7 +497,7 @@ def move_towards_enemy_with_astar(tank_position, nearest_enemy, map_grid):
     return best_movement
 
 def probabilistic_move2enemy_with_astar(tank_position, nearest_enemy, map_grid, movement):
-    if np.random.rand() < 0.50:
+    if np.random.rand() < 0.60:
         return move_towards_enemy_with_astar(tank_position, nearest_enemy, map_grid)
     else:
         return movement

@@ -59,7 +59,7 @@ class MultiPolicyAgent:
         light_tank_model_path = "src/models/LightTank/checkpoint_000400/checkpoint-400"
         heavy_tank_model_path = "src/models/LightTank/checkpoint_000400/checkpoint-400"
         drone_model_path = "src/models/Drone/checkpoint_000120/checkpoint-120"
-        manager_model_path = "src/models/Manager/model2.pkl"
+        manager_model_path = "src/models/Manager/model.pkl"
 
         args_for_models = Namespace(map="RiskyValley", render=False, gif=False, img=False)
         self.config = self.read_hypers("RiskyValley")

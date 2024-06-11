@@ -99,7 +99,7 @@ def enemy_locs(obs, team):
     enemy_hps = obs['hps'][(team+1) % 2]
     enemy_list3 = np.argwhere(enemy_hps != 0)
     enemy_list3 = set((tuple(i) for i in enemy_list3))
-    enemy_list4 = np.argwhere(enemy_units != 4)
+    enemy_list4 = np.argwhere(enemy_units != 4) # Drone'lar hedef alınmamalı
     enemy_list4 = set((tuple(i) for i in enemy_list4))
     return np.asarray(list(enemy_list1.intersection(enemy_list2).intersection(enemy_list3).intersection(enemy_list4)))
 
