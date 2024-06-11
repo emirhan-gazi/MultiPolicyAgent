@@ -108,6 +108,13 @@ Here is the structure of the `submissions/Agent` directory of our submission:
 ```
 pip install -r requirements.txt
 ```
+Make sure that Python packages in `requirements.txt` are installed. Also please make sure to install the following versions of the given libraries:
+
+- `Python==3.9.5`
+- `pytorch==1.11 with cudatoolkit=10.2`
+- `tensorflow==2.8.0`
+
+The game is developed for Linux Operating System (OS) and might not work on other OS (definitely does not work on Windows, untested on Mac). If the game does not work on your machine's OS, you need to deploy a virtual machine. You can deploy the Docker Container with the help of the `Dockerfile` given in the repository.
 
 - Then, you can run the `TwoBotsPlay.py` file to see the performance of the MultiPolicyAgent. You can run the following command to see the performance of the MultiPolicyAgent:
 ```

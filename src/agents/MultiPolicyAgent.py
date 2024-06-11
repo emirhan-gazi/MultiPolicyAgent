@@ -12,7 +12,7 @@ from argparse import Namespace
 from agents.Attack import Attack
 from agents.Collect import Collect
 from agents.Drone import Drone
-
+import pickle
 
 class MultiPolicyAgent:
     tagToString = {
@@ -59,6 +59,7 @@ class MultiPolicyAgent:
         light_tank_model_path = "/submissions/Agent/models/LightTank/checkpoint_000070/checkpoint-70"
         heavy_tank_model_path = "/submissions/Agent/models/HeavyTank/checkpoint_000070/checkpoint-70"
         drone_model_path = "/submissions/Agent/models/Drone/checkpoint_000070/checkpoint-70"
+        manager_model_path = "/submissions/Agent/models/Manager/model2.pkl"
 
         args_for_models = Namespace(map="RiskyValley", render=False, gif=False, img=False)
         self.config = self.read_hypers("RiskyValley")
@@ -69,6 +70,7 @@ class MultiPolicyAgent:
         self.initiate_light_tank(light_tank_model_path)
         self.initiate_heavy_tank(heavy_tank_model_path)
         self.initiate_drone(drone_model_path)
+        self.initiate_manager(manager_model_path)
     
 
     def initiate_truck(self, model_path, args):
@@ -86,7 +88,8 @@ class MultiPolicyAgent:
     def initiate_drone(self, model_path, args):
         self.ppo_agent.restore(checkpoint_path=model_path)
         self.drone_policy = self.ppo_agent.get_policy()
-
+    def initiate_manager(self, model_path):
+        self.model = pickle.load(open(model_path, 'rb'))
     @staticmethod
     def _decode_state(obs, team, enemy_team):
         turn = obs['turn'] # 1
@@ -184,6 +187,11 @@ class MultiPolicyAgent:
         drones = drones_locs(raw_state, team)
         light_tanks = light_tanks_locs(raw_state, team)
         heavy_tanks = heavy_tanks_locs(raw_state, team)
+        enemy_trucks = truck_locs(raw_state, (team+1)%2)
+        enemy_drones = drones_locs(raw_state, (team+1)%2)
+        enemy_light_tanks = light_tanks_locs(raw_state, (team+1)%2)
+        enemy_heavy_tanks = heavy_tanks_locs(raw_state, (team+1)%2)
+
         # truck movement
         truck_location, truck_movement, truck_target, train =  self.compute_single_action(state, raw_state, 1)
         # light tank movement
@@ -217,7 +225,11 @@ class MultiPolicyAgent:
                 locations.append(drone_location[i])
                 movement.append(drone_movement[i])
                 enemy_order.append(drone_target[i])
-        train = 0 
+
+        resource = raw_state['score'] 
+        manager_input  = [[resource, len(trucks), len(light_tanks), len(heavy_tanks), len(drones), len(enemy_trucks), len(enemy_light_tanks), len(enemy_heavy_tanks), len(enemy_drones)]]
+        output = self.model.predict(manager_input)
+        train = int(output[0])
                 
         return [locations, movement, enemy_order, train]
     
