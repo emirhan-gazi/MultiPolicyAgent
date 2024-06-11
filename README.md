@@ -2,23 +2,24 @@
 
 ### Important Files 
 - `MultiPolicyAgent.py` : The main file that contains the implementation of the MultiPolicyAgent class. You can find this file in the `submissions/Agent` directory. In order to show appropriate modular design of this file we put this file in `src/agents` directory also. This class works with `src/TwoBotsPlay.py` correctly on this modular design. 
+
 - `utilities.py` : This file contains the implementation of the utilities functions that are used in the MultiPolicyAgent class. You can find this file in the `submissions/Agent` directory. In order to show appropriate modular design of this file we put this file in `src/agents` directory also.
 
-- `Truck.py` : This file contains the implementation of the Truck class. Initially, we have implemented this file as learnable agent. After learning process we are using its function in MultiPolicyAgent class. You can find this file in the `submissions/Agent/agents/Truck` directory. In order to show appropriate modular design of this file we put this file in `src/agents/agents/Truck` directory also.
+- `Truck.py` : This file contains the implementation of the Truck class. Initially, we have implemented this file as learnable agent. After learning process we are using its function in MultiPolicyAgent class. You can find this file in the `submissions/Agent/agents/Truck` directory. In order to show appropriate modular design of this file we put this file in `src/agents` directory also.
 
-- `LightTank.py` : This file contains the implementation of the LightTank class. Initially, we have implemented this file as learnable agent. After learning process we are using its function in MultiPolicyAgent class. You can find this file in the `submissions/Agent/agents/LightTank` directory. In order to show appropriate modular design of this file we put this file in `src/agents/agents/LightTank` directory also.
+- `LightTank.py` : This file contains the implementation of the LightTank class. Initially, we have implemented this file as learnable agent. After learning process we are using its function in MultiPolicyAgent class. You can find this file in the `submissions/Agent/agents/LightTank` directory. In order to show appropriate modular design of this file we put this file in `src/agents` directory also.
 
-- `HeavyTank.py` : This file contains the implementation of the HeavyTank class. Initially, we have implemented this file as learnable agent. After learning process we are using its function in MultiPolicyAgent class. You can find this file in the `submissions/Agent/agents/HeavyTank` directory. In order to show appropriate modular design of this file we put this file in `src/agents/agents/HeavyTank` directory also.
+- `HeavyTank.py` : This file contains the implementation of the HeavyTank class. Initially, we have implemented this file as learnable agent. After learning process we are using its function in MultiPolicyAgent class. You can find this file in the `submissions/Agent/agents/HeavyTank` directory. In order to show appropriate modular design of this file we put this file in `src/agents` directory also.
 
-- `Drone.py` : This file contains the implementation of the Drone class. Initially, we have implemented this file as learnable agent. After learning process we are using its function in MultiPolicyAgent class. You can find this file in the `submissions/Agent/agents/Drone` directory. In order to show appropriate modular design of this file we put this file in `src/agents/agents/Drone` directory also.
+- `Drone.py` : This file contains the implementation of the Drone class. Initially, we have implemented this file as learnable agent. After learning process we are using its function in MultiPolicyAgent class. You can find this file in the `submissions/Agent/agents/Drone` directory. In order to show appropriate modular design of this file we put this file in `src/agents` directory also.
 
-- `utilities_truck.py` : This file contains the implementation of the utilities functions that are used in the Truck class. You can find this file in the `submissions/Agent/agents/Truck` directory. In order to show appropriate modular design of this file we put this file in `src/agents/agents/Truck` directory also.
+- `utilities_truck.py` : This file contains the implementation of the utilities functions that are used in the Truck class. You can find this file in the `submissions/Agent/agents/Truck` directory. In order to show appropriate modular design of this file we put this file in `src/agents` directory also.
 
-- `utilities_light_tank.py` : This file contains the implementation of the utilities functions that are used in the LightTank class. You can find this file in the `submissions/Agent/agents/LightTank` directory. In order to show appropriate modular design of this file we put this file in `src/agents/agents/LightTank` directory also.
+- `utilities_light_tank.py` : This file contains the implementation of the utilities functions that are used in the LightTank class. You can find this file in the `submissions/Agent/agents/LightTank` directory. In order to show appropriate modular design of this file we put this file in `src/agents` directory also.
 
-- `utilities_heavy_tank.py` : This file contains the implementation of the utilities functions that are used in the HeavyTank class. You can find this file in the `submissions/Agent/agents/HeavyTank` directory. In order to show appropriate modular design of this file we put this file in `src/agents/agents/HeavyTank` directory also.
+- `utilities_heavy_tank.py` : This file contains the implementation of the utilities functions that are used in the HeavyTank class. You can find this file in the `submissions/Agent/agents/HeavyTank` directory. In order to show appropriate modular design of this file we put this file in `src/agents` directory also.
 
-- `utilities_drone.py` : This file contains the implementation of the utilities functions that are used in the Drone class. You can find this file in the `submissions/Agent/agents/Drone` directory. In order to show appropriate modular design of this file we put this file in `src/agents/agents/Drone` directory also.
+- `utilities_drone.py` : This file contains the implementation of the utilities functions that are used in the Drone class. You can find this file in the `submissions/Agent/agents/Drone` directory. In order to show appropriate modular design of this file we put this file in `src/agents` directory also.
 
 - `models` : This directory contains the trained models of the Truck, LightTank, HeavyTank and Drone classes. You can find this directory in the `submissions/Agent/models` directory. In order to show appropriate modular design of this file we put this directory in `src/agents/models` directory also.
 
@@ -29,22 +30,18 @@
 Here is the structure of the `src/agents` directory of our submission:
 ```
 |
-|--- agents
-|    |--- MultiPolicyAgent.py
-|    |--- utilities.py
+|--- src
 |    |--- agents
-|         |--- Truck 
-|         |    |--- Truck.py
-|         |    |--- utilities_truck.py
-|         |--- LightTank
-|         |    |--- LightTank.py
-|         |    |--- utilities_light_tank.py
-|         |--- HeavyTank
-|         |    |--- HeavyTank.py
-|         |    |--- utilities_heavy_tank.py
-|         |--- Drone
-|              |--- Drone.py
-|              |--- utilities_drone.py
+|         |--- MultiPolicyAgent.py
+|         |--- utilities.py
+|         |--- Truck.py
+|         |--- LightTank.py
+|         |--- HeavyTank.py
+|         |--- Drone.py
+|         |--- utilities_truck.py
+|         |--- utilities_light_tank.py
+|         |--- utilities_heavy_tank.py
+|         |--- utilities_drone.py
 |    |--- models
 |         |--- Truck
 |         |    |--- Truck.pth
@@ -54,7 +51,7 @@ Here is the structure of the `src/agents` directory of our submission:
 |         |    |--- HeavyTank.pth
 |         |--- Drone
 |              |--- Drone.pth
-|
+
 ```
 
 Here is the structure of the `submissions/Agent` directory of our submission:
@@ -88,17 +85,20 @@ Here is the structure of the `submissions/Agent` directory of our submission:
 |    |--- train_scripts
 |         |--- Truck
 |               |--- traincadet_truck.py
-|               |--- <map_name>.yaml
+|               |--- maps
+|                   |--- <map_name>.yaml
 |         |--- LightTank
 |               |--- traincadet_light_tank.py
-|               |--- <map_name>.yaml
+|               |--- maps
+|                   |--- <map_name>.yaml
 |         |--- HeavyTank
 |               |--- traincadet_heavy_tank.py
-|               |--- <map_name>.yaml
+|               |--- maps
+|                   |--- <map_name>.yaml
 |         |--- Drone
 |               |--- traincadet_drone.py
-|               |--- <map_name>.yaml
-|
+|               |--- maps
+|                   |--- <map_name>.yaml
 ```
 
 
