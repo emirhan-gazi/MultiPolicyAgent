@@ -5,31 +5,29 @@ from gym import spaces
 import numpy as np
 import yaml
 from game import Game
-from utilities import multi_forced_anchor, necessary_obs, decode_location, multi_reward_shape, enemy_locs, ally_locs, getDistance
+from utilities_light_tank import multi_forced_anchor, necessary_obs, decode_location, multi_reward_shape, enemy_locs, ally_locs, getDistance, offensive_reward, rearrange_targets
 
-
-
-class Collect(BaseLearningAgentGym):
+class LightTank(BaseLearningAgentGym):
     """Simple agent works for every environment"""
-    
+
     tagToString = {
             1: "Truck",
             2: "LightTank",
             3: "HeavyTank",
             4: "Drone",
         }
-    def read_hypers(self,map):
-            with open(f"data/config/{map}.yaml", "r") as f:   
+    def read_hypers(self, map):
+            with open(f"data/config/{map}.yaml", "r") as f:
                 hyperparams_dict = yaml.safe_load(f)
                 return hyperparams_dict
-            
+
     def __init__(self, args, agents, team=0):
-        super().__init__() 
+        super().__init__()
         configs = self.read_hypers(args.map)
         self.game = Game(args, agents)
         self.team = team
         self.enemy_team = 1
-        self.count = 3
+        self.count = 2
         self.height = configs['map']['y']
         self.width = configs['map']['x']
         self.terrain = configs['map']['terrain']
@@ -54,16 +52,16 @@ class Collect(BaseLearningAgentGym):
         # print("setup")
 
     def reset(self):
-        self.previous_enemy_count = 4
-        self.previous_ally_count = 4
+        self.previous_enemy_count = 1
+        self.previous_ally_count = 1
         self.episodes += 1
-        self.count = 3
+        self.count = 2
 
         self.steps = 0
         state = self.game.reset()
         self.nec_obs = state
         return self.decode_state(state)
-        
+
 
     @staticmethod
     def _decode_state(obs, team, enemy_team):
@@ -75,7 +73,7 @@ class Collect(BaseLearningAgentGym):
         score = obs['score'] # 2
         res = obs['resources'] # 7x15
         load = obs['loads'] # 2x7x15
-        terrain = obs["terrain"] # 7x15 
+        terrain = obs["terrain"] # 7x15
         y_max, x_max = res.shape
         my_units = []
         enemy_units = []
@@ -84,9 +82,9 @@ class Collect(BaseLearningAgentGym):
             for j in range(x_max):
                 if units[team][i][j]<6 and units[team][i][j] != 0:
                     my_units.append(
-                    {   
+                    {
                         'unit': units[team][i][j],
-                        'tag': Collect.tagToString[units[team][i][j]],
+                        'tag': LightTank.tagToString[units[team][i][j]],
                         'hp': hps[team][i][j],
                         'location': (i,j),
                         'load': load[team][i][j]
@@ -94,9 +92,9 @@ class Collect(BaseLearningAgentGym):
                     )
                 if units[enemy_team][i][j]<6 and units[enemy_team][i][j] != 0:
                     enemy_units.append(
-                    {   
+                    {
                         'unit': units[enemy_team][i][j],
-                        'tag': Collect.tagToString[units[enemy_team][i][j]],
+                        'tag': LightTank.tagToString[units[enemy_team][i][j]],
                         'hp': hps[enemy_team][i][j],
                         'location': (i,j),
                         'load': load[enemy_team][i][j]
@@ -108,7 +106,7 @@ class Collect(BaseLearningAgentGym):
                     my_base = (i,j)
                 if bases[enemy_team][i][j]:
                     enemy_base = (i,j)
-        
+
         # print(my_units)
         unitss = [*units[0].reshape(-1).tolist(), *units[1].reshape(-1).tolist()]
         hpss = [*hps[0].reshape(-1).tolist(), *hps[1].reshape(-1).tolist()]
@@ -116,15 +114,14 @@ class Collect(BaseLearningAgentGym):
         ress = [*res.reshape(-1).tolist()]
         loads = [*load[0].reshape(-1).tolist(), *load[1].reshape(-1).tolist()]
         terr = [*terrain.reshape(-1).tolist()]
-        
+
         state = (*score.tolist(), turn, max_turn, *unitss, *hpss, *basess, *ress, *loads, *terr)
 
-
-        return np.array(state, dtype=np.int16), (x_max, y_max, my_units, enemy_units, resources, my_base,enemy_base)
+        return np.array(state, dtype=np.int16), (x_max, y_max, my_units, enemy_units, resources, my_base, enemy_base)
 
     @staticmethod
     def just_decode_state(obs, team, enemy_team):
-        state, _ = Collect._decode_state(obs, team, enemy_team)
+        state, _ = LightTank._decode_state(obs, team, enemy_team)
         return state
 
     def decode_state(self, obs):
@@ -132,20 +129,20 @@ class Collect(BaseLearningAgentGym):
         self.x_max, self.y_max, self.my_units, self.enemy_units, self.resources, self.my_base, self.enemy_base = info
         return state
 
-    
+
     def take_action(self, action):
-        action[14] = 1 if self.count > 0 else 0
-        self.count -= 1
-        return self.just_take_action(action, self.nec_obs, self.team, self.terrain) 
+        action[14] = 0
+        # self.count -= 1
+
+        return self.just_take_action(action, self.nec_obs, self.team, self.terrain)
 
     @staticmethod
-    def just_take_action(action, raw_state, team, map_grid = None):
-        
+    def just_take_action(action, raw_state, team, map_grid):
+
         movement = action[0:7]
         movement = movement.tolist()
         target = action[7:14]
         train = action[14]
-        train = 1 if train > 0 else 0
 
         enemy_order = []
 
@@ -202,59 +199,54 @@ class Collect(BaseLearningAgentGym):
             while len(locations) > 7:
                 locations = list(locations)[:7]
 
-        movement = multi_forced_anchor(movement, raw_state, team, map_grid=map_grid)
+        movement = multi_forced_anchor(movement, raw_state, team, map_grid)
         if len(locations) > 0:
             locations = list(map(list, locations))
+
+
+        for i in range(len(locations)):
+            close_enemy = []
+            for k in range(len(enemy_order)):
+                if getDistance(locations[i], enemy_order[k]) <= 2:
+                    movement[i] = 0
+                    close_enemy.append(enemy_order[k])
+                    enemy_order[i] = enemy_order[k]
+
+            close_rearranged = rearrange_targets(raw_state, team, close_enemy)
+            if len(close_rearranged) > 0:
+                enemy_order[i] = close_rearranged[0]
+
 
         #locations'dan biri, bir düşmana 2 adımda veya daha yakınsa dur (movement=0) ve ona ateş et (target = arg.min(distances))
 
         locations = list(map(tuple, locations))
         return [locations, movement, enemy_order, train]
-    
-# Movement:  [1 6 5 3 6 1 6]
-# movement after tolist:  [1, 6, 5, 3, 6, 1, 6]
-# Target:  [4 2 4 6 6 4 3]
-# Train:  0
-# Allies:  [(1, 1), (0, 3), (0, 2)]
-# Enemies:  [[2 5] [3 5] [[1 5]]
-# Locations:  [(1, 1), (0, 3), (0, 2)]
-# Locations:  [[1, 1], [0, 3], [0, 2]]
-# locations after map:  [(1, 1), (0, 3), (0, 2)]
-# enemy order [[3, 5], [1, 5], [3, 5]]
-
 
     def step(self, action):
-        harvest_reward = 0
         kill_reward = 0
         martyr_reward = 0
         action = self.take_action(action)
         next_state, _, done =  self.game.step(action)
-        harvest_reward, enemy_count, ally_count = multi_reward_shape(self.nec_obs, self.team)
-        #if enemy_count < self.previous_enemy_count:
+        each_distance_reward, distance_reward, enemy_count, ally_count = offensive_reward(self.nec_obs, self.team)
+
+        coef1 = 90
+        coef2 = 10
+
+        # if enemy_count < self.previous_enemy_count:
         #    kill_reward = (self.previous_enemy_count - enemy_count) * 5
-
-        #if ally_count < self.previous_ally_count:
-        
+        # if ally_count < self.previous_ally_count:
         #    martyr_reward = (self.previous_ally_count - ally_count) * 5
-        #reward = harvest_reward + kill_reward - martyr_reward
 
-        negative_reward = 0
-        threshold_distance_to_enemy_base = 10
-        for unit in self.my_units:
-            # print(unit['location'])
-            distance_to_enemy_base = getDistance(list(unit['location']), list(self.enemy_base))
-            # print(list(self.enemy_base))
-            if distance_to_enemy_base <= threshold_distance_to_enemy_base:
-                # print("Distance to enemy base is less than 6")
-                negative_reward -= (threshold_distance_to_enemy_base - distance_to_enemy_base) * 5
-
-        reward = harvest_reward  + negative_reward
+        reward = each_distance_reward * coef1 + distance_reward * coef2
 
         self.previous_enemy_count = enemy_count
         self.previous_ally_count = ally_count
         info = {}
         self.steps += 1
         self.reward += reward
+
+        if ally_count == 0 or enemy_count == 0:
+            done = True
 
         self.nec_obs = next_state
         return self.decode_state(next_state), reward, done, info
