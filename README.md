@@ -1,6 +1,13 @@
 # MultiPolicyAgent
 
 ### Important Files 
+
+-  If you want to run the code `src/` is the runnable directory. You can run the `TwoBotsPlay.py` file to see the performance of the MultiPolicyAgent. You can run the following command to see the performance of the MultiPolicyAgent:
+
+```
+python src/TwoBotsPlay.py RiskyValley --agentBlue MultiPolicyAgent --agentRed RandomAgent --render
+```
+
 - `MultiPolicyAgent.py` : The main file that contains the implementation of the MultiPolicyAgent class. You can find this file in the `submissions/Agent` directory. In order to show appropriate modular design of this file we put this file in `src/agents` directory also. This class works with `src/TwoBotsPlay.py` correctly on this modular design. 
 
 - `utilities.py` : This file contains the implementation of the utilities functions that are used in the MultiPolicyAgent class. You can find this file in the `submissions/Agent` directory. In order to show appropriate modular design of this file we put this file in `src/agents` directory also.

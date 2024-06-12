@@ -298,7 +298,7 @@ def move_towards_enemy_with_astar(drone, nearest_enemy, map_grid):
 def probabilistic_move2enemy_with_astar(drone, nearest_enemy, map_grid, movement):
     if nearest_enemy is None:
         return movement
-    if np.random.rand() < 0.9:
+    if np.random.rand() < 0.95:
         return move_towards_enemy_with_astar(drone, nearest_enemy, map_grid)
     else:
         return movement

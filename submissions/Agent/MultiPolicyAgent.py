@@ -55,11 +55,11 @@ class MultiPolicyAgent:
         self.enemy_team = (team+1)%2
         self.temp_agents  = [None,"RandomAgent"]
        
-        truck_model_path = "src/models/Truck/checkpoint_000760/checkpoint-760"
-        light_tank_model_path = "src/models/LightTank/checkpoint_000400/checkpoint-400"
-        heavy_tank_model_path = "src/models/HeavyTank/checkpoint_000400/checkpoint-400"
-        drone_model_path = "src/models/Drone/checkpoint_000120/checkpoint-120"
-        manager_model_path = "src/models/Manager/model.pkl"
+        truck_model_path = "models/Truck/checkpoint_000760/checkpoint-760"
+        light_tank_model_path = "models/LightTank/checkpoint_000400/checkpoint-400"
+        heavy_tank_model_path = "models/HeavyTank/checkpoint_000400/checkpoint-400"
+        drone_model_path = "models/Drone/checkpoint_000120/checkpoint-120"
+        manager_model_path = "models/Manager/model3.pkl"
 
         args_for_models = Namespace(map="RiskyValley", render=False, gif=False, img=False)
         self.config = self.read_hypers("RiskyValley")
