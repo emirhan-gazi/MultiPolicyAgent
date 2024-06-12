@@ -50,7 +50,10 @@ Here is the structure of the `src/agents` directory of our submission:
 |         |--- HeavyTank
 |         |    |--- HeavyTank.pth
 |         |--- Drone
-|              |--- Drone.pth
+|         |     |--- Drone.pth
+|         |----Manager
+|               |--- model.pkl
+
 
 ```
 
@@ -81,7 +84,9 @@ Here is the structure of the `submissions/Agent` directory of our submission:
 |         |--- HeavyTank
 |         |    |--- HeavyTank.pth
 |         |--- Drone
-|              |--- Drone.pth
+|         |     |--- Drone.pth
+|         |----Manager
+|               |--- model.pkl
 |    |--- train_scripts
 |         |--- Truck
 |               |--- traincadet_truck.py
